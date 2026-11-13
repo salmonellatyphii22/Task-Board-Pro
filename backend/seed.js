@@ -1,3 +1,4 @@
+
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
@@ -14,95 +15,97 @@ const seedData = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('Connected to MongoDB Atlas for seeding...');
 
-    // Clear existing data
+    // Clear existing demo data
     await User.deleteMany({});
     await Workspace.deleteMany({});
     await Sprint.deleteMany({});
     await Task.deleteMany({});
     await ActivityLog.deleteMany({});
+
     console.log('Cleared existing database collections.');
 
-    // Password hash for test accounts
     const passwordHash = await bcrypt.hash('Password123!', 10);
 
-    // 1. Create Users
+    // 1. Create Indian demo users
     const admin = await User.create({
-      name: 'Alice Admin',
+      name: 'Rohan Sharma',
       email: 'admin@example.com',
       passwordHash,
       role: 'admin'
     });
 
     const manager = await User.create({
-      name: 'Mark Manager',
+      name: 'Priya Verma',
       email: 'manager@example.com',
       passwordHash,
       role: 'manager'
     });
 
     const emp1 = await User.create({
-      name: 'Emma Employee (Max Capacity)',
+      name: 'Aarav Gupta',
       email: 'employee1@example.com',
       passwordHash,
       role: 'employee'
     });
 
     const emp2 = await User.create({
-      name: 'Eric Employee',
+      name: 'Ananya Singh',
       email: 'employee2@example.com',
       passwordHash,
       role: 'employee'
     });
 
-    console.log('Created Users:');
-    console.log(`  Admin: ${admin.email} (Password: Password123!)`);
-    console.log(`  Manager: ${manager.email} (Password: Password123!)`);
-    console.log(`  Employee 1 (Max 8 Tasks): ${emp1.email} (Password: Password123!)`);
-    console.log(`  Employee 2: ${emp2.email} (Password: Password123!)`);
+    console.log('Created Indian demo users:');
+    console.log(`Admin: ${admin.email}`);
+    console.log(`Manager: ${manager.email}`);
+    console.log(`Employee 1: ${emp1.email}`);
+    console.log(`Employee 2: ${emp2.email}`);
+    console.log('Demo password: Password123!');
 
-    // 2. Create 3 Workspaces
+    // 2. Create workspaces
     const ws1 = await Workspace.create({
-      name: 'Engineering Workspace',
-      description: 'Core product backend engineering and API architecture team workspace',
+      name: 'Technology & Development Team',
+      description: 'Software development, backend engineering and API management',
       createdBy: admin._id,
       members: [admin._id, manager._id, emp1._id, emp2._id]
     });
 
     const ws2 = await Workspace.create({
-      name: 'Mobile App Workspace',
-      description: 'iOS and Android client application development workspace',
+      name: 'Business Operations Team',
+      description: 'Accounting, finance, GST and business operations',
       createdBy: admin._id,
       members: [admin._id, manager._id, emp1._id, emp2._id]
     });
 
     const ws3 = await Workspace.create({
-      name: 'Design & Marketing Workspace',
-      description: 'Brand identity, UI design system, and marketing campaigns workspace',
+      name: 'Marketing & Design Team',
+      description: 'Digital marketing, branding, UI design and campaigns',
       createdBy: admin._id,
       members: [admin._id, manager._id, emp2._id]
     });
 
-    console.log('Created 3 Workspaces:');
-    console.log(`  1. '${ws1.name}'`);
-    console.log(`  2. '${ws2.name}'`);
-    console.log(`  3. '${ws3.name}'`);
+    console.log('Created 3 Indian company workspaces.');
 
-    // 3. Create Sprints
+    // 3. Create sprints
     const now = new Date();
-    const twoWeeksLater = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
-    const fourWeeksLater = new Date(now.getTime() + 28 * 24 * 60 * 60 * 1000);
+    const twoWeeksLater = new Date(
+      now.getTime() + 14 * 24 * 60 * 60 * 1000
+    );
+    const fourWeeksLater = new Date(
+      now.getTime() + 28 * 24 * 60 * 60 * 1000
+    );
 
     const sprint1 = await Sprint.create({
       workspaceId: ws1._id,
-      name: 'Sprint 1 - Core Backend & Auth',
+      name: 'Sprint 1 - Core Development',
       startDate: now,
       endDate: twoWeeksLater,
       isActive: true
     });
 
-    const sprint2 = await Sprint.create({
+    await Sprint.create({
       workspaceId: ws1._id,
-      name: 'Sprint 2 - Sockets & Realtime',
+      name: 'Sprint 2 - Testing & Integration',
       startDate: twoWeeksLater,
       endDate: fourWeeksLater,
       isActive: false
@@ -110,23 +113,27 @@ const seedData = async () => {
 
     const sprintMobile = await Sprint.create({
       workspaceId: ws2._id,
-      name: 'Mobile Sprint 1 - UI & API Sync',
+      name: 'Sprint 1 - Business Operations',
       startDate: now,
       endDate: twoWeeksLater,
       isActive: true
     });
 
-    console.log('Created Sprints across workspaces.');
+    console.log('Created sprints across workspaces.');
 
-    // 4. Create Tasks
-    const pastDueDate = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
-    const futureDueDate = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000);
+    // 4. Create realistic Indian workplace tasks
+    const pastDueDate = new Date(
+      now.getTime() - 2 * 24 * 60 * 60 * 1000
+    );
+    const futureDueDate = new Date(
+      now.getTime() + 5 * 24 * 60 * 60 * 1000
+    );
 
     const tasks = [
-      // --- 8 ACTIVE TASKS ASSIGNED TO emp1 (Emma Employee) to reach MAX 8 TASK CAPACITY ---
+      // 8 tasks assigned to Aarav
       {
-        title: 'Task 1: Database Schema & Validation Indexes',
-        description: 'Design Mongoose schemas with validation and compound indexes',
+        title: 'Implement GST Database Validation',
+        description: 'Develop and validate database fields for GST records and transactions.',
         priority: 'high',
         status: 'in_progress',
         dueDate: futureDueDate,
@@ -134,12 +141,16 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['backend', 'database'],
-        comments: [{ text: 'Schema models created cleanly.', author: manager._id, authorName: 'Mark Manager' }]
+        labels: ['GST', 'database'],
+        comments: [{
+          text: 'Initial database structure is ready.',
+          author: manager._id,
+          authorName: 'Priya Verma'
+        }]
       },
       {
-        title: 'Task 2: Implement JWT Auth & Role Authorization Guard',
-        description: 'Role-gated API endpoints with bcrypt password hashing',
+        title: 'Complete Employee Login & Access Management',
+        description: 'Implement secure employee login and role-based access permissions.',
         priority: 'high',
         status: 'in_progress',
         dueDate: futureDueDate,
@@ -147,11 +158,11 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['security', 'backend']
+        labels: ['security', 'authentication']
       },
       {
-        title: 'Task 3: Build Task State Transition Machine',
-        description: 'Enforce transition lookup table and 8-active-task limit',
+        title: 'Develop Monthly Attendance Management',
+        description: 'Build employee attendance tracking and monthly attendance reports.',
         priority: 'high',
         status: 'review',
         dueDate: futureDueDate,
@@ -159,11 +170,11 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['business-rules']
+        labels: ['HR', 'attendance']
       },
       {
-        title: 'Task 4: Setup Activity Audit Logger Service',
-        description: 'Centralized logging service for all workspace mutations',
+        title: 'Prepare Monthly Financial Audit Report',
+        description: 'Compile financial transactions and prepare the monthly audit report.',
         priority: 'medium',
         status: 'in_progress',
         dueDate: futureDueDate,
@@ -171,11 +182,11 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['audit']
+        labels: ['finance', 'audit']
       },
       {
-        title: 'Task 5: Configure Socket.io Workspace Event Rooms',
-        description: 'Broadcast task updates to workspace rooms live',
+        title: 'Implement Real-Time Employee Notifications',
+        description: 'Send live notifications when tasks are assigned or updated.',
         priority: 'medium',
         status: 'todo',
         dueDate: futureDueDate,
@@ -183,11 +194,11 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['realtime', 'sockets']
+        labels: ['notifications', 'realtime']
       },
       {
-        title: 'Task 6: Build Executive Analytics Aggregation Pipeline',
-        description: 'MongoDB $facet aggregation pipeline for dashboard metrics',
+        title: 'Generate Monthly Business Performance Report',
+        description: 'Prepare dashboard metrics for sales, expenses and completed tasks.',
         priority: 'high',
         status: 'todo',
         dueDate: futureDueDate,
@@ -195,11 +206,11 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['analytics']
+        labels: ['analytics', 'reporting']
       },
       {
-        title: 'Task 7: Setup Docker & Compose Environment',
-        description: 'Multi-container orchestration setup for Node API and MongoDB',
+        title: 'Configure Cloud Deployment Environment',
+        description: 'Prepare the application environment for cloud hosting and deployment.',
         priority: 'low',
         status: 'todo',
         dueDate: futureDueDate,
@@ -207,11 +218,11 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['devops', 'docker']
+        labels: ['cloud', 'deployment']
       },
       {
-        title: 'Task 8: Implement Workspace Archive Active Sprint Guard',
-        description: 'Block archiving if active sprint exists in workspace',
+        title: 'Validate Employee Workload and Task Limits',
+        description: 'Check task assignment limits and employee workload distribution.',
         priority: 'medium',
         status: 'review',
         dueDate: futureDueDate,
@@ -219,27 +230,27 @@ const seedData = async () => {
         sprintId: sprint1._id,
         workspaceId: ws1._id,
         createdBy: manager._id,
-        labels: ['security', 'validation']
+        labels: ['validation', 'workload']
       },
 
-      // --- TASKS ASSIGNED TO emp2 (Eric Employee) & OTHER WORKSPACES ---
+      // Tasks assigned to Ananya
       {
-        title: 'Mobile UI Navigation & Dark Mode Integration',
-        description: 'Responsive mobile drawer navigation and theme switcher',
+        title: 'Improve Mobile Dashboard Navigation',
+        description: 'Improve responsive navigation and usability on mobile devices.',
         priority: 'medium',
         status: 'in_progress',
-        dueDate: pastDueDate, // Overdue task!
+        dueDate: pastDueDate,
         assignedTo: emp2._id,
         sprintId: sprintMobile._id,
         workspaceId: ws2._id,
         createdBy: manager._id,
-        labels: ['mobile', 'ui', 'overdue']
+        labels: ['mobile', 'UI', 'overdue']
       },
       {
-        title: 'Task Comments & Thread Discussion API',
-        description: 'Subdocument comments array with real-time socket events',
+        title: 'Implement Team Discussion and Comments',
+        description: 'Allow employees and managers to discuss tasks through comments.',
         priority: 'medium',
-        status: 'done', // Completed task
+        status: 'done',
         dueDate: pastDueDate,
         assignedTo: emp2._id,
         sprintId: sprint1._id,
@@ -248,8 +259,8 @@ const seedData = async () => {
         labels: ['comments', 'completed']
       },
       {
-        title: 'Design System & Component Tokens Specs',
-        description: 'Figma tokens and color contrast specifications',
+        title: 'Design Company Dashboard UI Components',
+        description: 'Create consistent dashboard components, layouts and visual styles.',
         priority: 'low',
         status: 'todo',
         dueDate: futureDueDate,
@@ -257,49 +268,39 @@ const seedData = async () => {
         sprintId: sprintMobile._id,
         workspaceId: ws2._id,
         createdBy: manager._id,
-        labels: ['design']
+        labels: ['design', 'dashboard']
       }
     ];
 
     await Task.insertMany(tasks);
-    console.log(`Created ${tasks.length} initial Tasks across 3 workspaces.`);
-    console.log(`  NOTE: Emma Employee (employee1@example.com) currently has MAX 8 ACTIVE TASKS assigned!`);
 
-    // 5. Seed Activity Logs
-    await ActivityLog.create({
-      workspaceId: ws1._id,
-      entityType: 'workspace',
-      entityId: ws1._id,
-      action: 'created',
-      performedBy: admin._id,
-      performedByName: admin.name,
-      message: `Workspace '${ws1.name}' created by Admin '${admin.name}'`
-    });
+    console.log(`Created ${tasks.length} tasks across 3 workspaces.`);
+    console.log('Aarav Gupta has 8 assigned active tasks.');
 
-    await ActivityLog.create({
-      workspaceId: ws2._id,
-      entityType: 'workspace',
-      entityId: ws2._id,
-      action: 'created',
-      performedBy: admin._id,
-      performedByName: admin.name,
-      message: `Workspace '${ws2.name}' created by Admin '${admin.name}'`
-    });
+    // 5. Seed activity logs
+    const workspaces = [ws1, ws2, ws3];
 
-    await ActivityLog.create({
-      workspaceId: ws3._id,
-      entityType: 'workspace',
-      entityId: ws3._id,
-      action: 'created',
-      performedBy: admin._id,
-      performedByName: admin.name,
-      message: `Workspace '${ws3.name}' created by Admin '${admin.name}'`
-    });
+    for (const workspace of workspaces) {
+      await ActivityLog.create({
+        workspaceId: workspace._id,
+        entityType: 'workspace',
+        entityId: workspace._id,
+        action: 'created',
+        performedBy: admin._id,
+        performedByName: admin.name,
+        message: `Workspace '${workspace.name}' created by Admin '${admin.name}'`
+      });
+    }
 
+    console.log('Seed activity logs created.');
     console.log('Seeding completed successfully!');
+
+    await mongoose.disconnect();
     process.exit(0);
+
   } catch (error) {
     console.error('Seeding error:', error);
+    await mongoose.disconnect();
     process.exit(1);
   }
 };

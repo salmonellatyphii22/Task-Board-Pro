@@ -1,28 +1,258 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* =================================
+   TASKBOARD PRO - CHOCOLATE LATTE THEME
+================================= */
+
+:root {
+  --espresso: #21130F;
+  --dark-chocolate: #2B1913;
+  --chocolate: #40251D;
+  --mocha: #573729;
+  --brown: #70432F;
+  --caramel: #A66B43;
+  --bronze: #C18A5B;
+  --latte: #D9B895;
+  --ivory: #F5E9DC;
+  --muted: #BBA795;
+  --sage: #8C9B72;
+  --border: rgba(217, 184, 149, 0.18);
+}
+
 @layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
   body {
-    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-sky-500 selection:text-white min-h-screen font-sans transition-colors duration-300;
+    min-height: 100%;
+    margin: 0;
+    background: var(--espresso);
+    color: var(--ivory);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: var(--espresso);
+  }
+
+  ::selection {
+    background: var(--caramel);
+    color: #FFFFFF;
+  }
+
+  input,
+  textarea,
+  select {
+    background-color: var(--dark-chocolate);
+    color: var(--ivory);
+    border-color: var(--border);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--muted);
+  }
+
+  option {
+    background: var(--dark-chocolate);
+    color: var(--ivory);
+  }
+
+  button {
+    transition: all 0.2s ease;
+  }
+
+  a {
+    transition: color 0.2s ease;
   }
 }
 
-/* Custom scrollbars for Kanban columns */
+/* =================================
+   SCROLLBAR
+================================= */
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--espresso);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
-  border-radius: 4px;
+  background: var(--brown);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: var(--caramel);
+}
+
+/* =================================
+   FOCUS
+================================= */
+
+*:focus-visible {
+  outline: 2px solid var(--bronze);
+  outline-offset: 2px;
+}
+
+/* =================================
+   COMMON THEME COMPONENTS
+================================= */
+
+.chocolate-card {
+  background: var(--dark-chocolate);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.chocolate-panel {
+  background: var(--chocolate);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.caramel-button {
+  background: linear-gradient(135deg, var(--brown), var(--caramel));
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.caramel-button:hover {
+  filter: brightness(1.15);
+}
+
+.text-ivory {
+  color: var(--ivory);
+}
+
+.text-latte {
+  color: var(--latte);
+}
+
+/* =================================
+   GLOBAL TAILWIND COLOR OVERRIDES
+================================= */
+
+/* Blue and indigo backgrounds */
+[class*="bg-blue-"],
+[class*="bg-indigo-"],
+[class*="bg-sky-"],
+[class*="bg-violet-"] {
+  background-color: var(--brown) !important;
+}
+
+/* Blue and indigo text */
+[class*="text-blue-"],
+[class*="text-indigo-"],
+[class*="text-sky-"],
+[class*="text-violet-"] {
+  color: var(--latte) !important;
+}
+
+/* Blue and indigo borders */
+[class*="border-blue-"],
+[class*="border-indigo-"],
+[class*="border-sky-"],
+[class*="border-violet-"] {
+  border-color: var(--caramel) !important;
+}
+
+/* Blue and indigo rings */
+[class*="ring-blue-"],
+[class*="ring-indigo-"],
+[class*="ring-sky-"] {
+  --tw-ring-color: var(--bronze) !important;
+}
+
+/* Common light surfaces */
+[class*="bg-white"],
+[class*="bg-slate-50"],
+[class*="bg-gray-50"] {
+  background-color: var(--dark-chocolate) !important;
+}
+
+/* Dark surfaces */
+[class*="bg-slate-900"],
+[class*="bg-gray-900"] {
+  background-color: var(--espresso) !important;
+}
+
+/* Medium surfaces */
+[class*="bg-slate-800"],
+[class*="bg-gray-800"] {
+  background-color: var(--chocolate) !important;
+}
+
+/* Text colors */
+[class*="text-slate-900"],
+[class*="text-slate-800"],
+[class*="text-gray-900"],
+[class*="text-gray-800"] {
+  color: var(--ivory) !important;
+}
+
+[class*="text-slate-500"],
+[class*="text-slate-400"],
+[class*="text-gray-500"],
+[class*="text-gray-400"] {
+  color: var(--muted) !important;
+}
+
+/* Borders */
+[class*="border-slate-"],
+[class*="border-gray-"] {
+  border-color: var(--border) !important;
+}
+
+/* =================================
+   BUTTONS AND INTERACTIONS
+================================= */
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button[class*="bg-blue-"],
+button[class*="bg-indigo-"],
+button[class*="bg-sky-"] {
+  background: linear-gradient(135deg, var(--brown), var(--caramel)) !important;
+  color: white !important;
+}
+
+/* =================================
+   THEME TRANSITIONS
+================================= */
+
+.chocolate-card,
+.chocolate-panel,
+button,
+input,
+textarea,
+select {
+  transition: background-color 0.25s ease,
+              border-color 0.25s ease,
+              color 0.25s ease;
+}
+
+/* =================================
+   RESPONSIVE LAYOUT
+================================= */
+
+@media (max-width: 768px) {
+  #root {
+    overflow-x: hidden;
+  }
 }

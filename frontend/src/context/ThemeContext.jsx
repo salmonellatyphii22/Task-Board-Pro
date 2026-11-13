@@ -1,25 +1,25 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme ? savedTheme : 'dark';
+    return localStorage.getItem('theme') || 'dark';
   });
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+
+    root.classList.add('dark');
+    root.classList.remove('light');
+    root.dataset.theme = 'chocolate';
+
     localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setTheme('dark');
   };
 
   return (
