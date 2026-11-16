@@ -21,10 +21,10 @@ services:
     container_name: taskboard_backend
     restart: always
     ports:
-      - "5000:5000"
+      - "5001:5000"
     environment:
       PORT: 5000
-      MONGO_URI: mongodb://mongodb:27017/task_board
+      MONGO_URI: mongodb+srv://uchihakakashi289_db_user:lEBikLvcXNuLLmWP@task-board-pro.l8fefru.mongodb.net/
       JWT_SECRET: super_secret_task_board_jwt_key_2026
       NODE_ENV: production
     depends_on:
